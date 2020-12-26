@@ -7,7 +7,7 @@ const devConfig = {
   },
   port: process.env.PORT || 6064,
   database: {
-    url: ''
+    url: 'mongodb+srv://cefalo:cefalo@cefalo.vc94c.mongodb.net/ecommerce?retryWrites=true&w=majority'
   },
   session: {
     secret: 'Z6?x4Td8D&W8j5zAMQv2uxFZ$V$#_RWU',
