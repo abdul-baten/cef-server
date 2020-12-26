@@ -3,7 +3,7 @@ import path from 'path';
 const devConfig = {
   app: {
     title: 'cefalo e-commerce server',
-    baseUrl: '/api'
+    baseUrl: '/api/'
   },
   port: process.env.PORT || 6064,
   database: {
