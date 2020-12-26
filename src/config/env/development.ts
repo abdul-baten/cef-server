@@ -19,6 +19,12 @@ const devConfig = {
     algorithm: 'RS256', // RSASSA [ "RS256", "RS384", "RS512" ]
     rsaPrivateKey: path.join(__dirname, '../keys/private.key'),
     rsaPublicKey: path.join(__dirname, '../keys/public.key')
+  },
+  logging: {
+    label: 'development',
+    deployment: 'development',
+    level: 'debug',
+    excludedKeysToSanitize: ['password', 'Authorization', 'access_token']
   }
 };
 
