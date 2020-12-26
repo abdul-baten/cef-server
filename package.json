@@ -29,6 +29,7 @@
     "mongoose": "^5.11.8",
     "morgan": "^1.9.1",
     "path-to-regexp": "^6.2.0",
+    "reflect-metadata": "^0.1.13",
     "uuid": "^8.3.2",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0"

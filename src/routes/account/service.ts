@@ -1,4 +1,4 @@
-import IAuthToken from '../../models/authToken';
+import 'reflect-metadata';
 import RequestMapper from './mappers/request-mapper';
 import { AccountErrorCodes } from './errors';
 import { HTTPError } from '../../utils/httpErrors';
@@ -13,7 +13,6 @@ class AccountService implements IAccountCredentialService {
       const loginData = RequestMapper.loginDTO(credential);
       // const accessToken = await this.auth.getAccessToken();
       // const token = { accessToken } as IAuthToken;
-      console.info(loginData);
       return { authToken: 'aa' };
     } catch (err) {
       const { message, httpCode, errorCode } = AccountErrorCodes.INCORRECT_CREDENTIALS;
