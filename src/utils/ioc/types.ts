@@ -1,3 +1,4 @@
 export const TYPES = {
-  AccountCredentials: Symbol('AccountCredentials')
+  AccountCredentials: Symbol('AccountCredentials'),
+  ProductCredentials: Symbol('ProductCredentials')
 };
