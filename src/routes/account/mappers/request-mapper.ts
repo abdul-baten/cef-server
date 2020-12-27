@@ -3,7 +3,7 @@ import { credential, regCredential } from './templates';
 import { IAccount } from '../../../models/account';
 
 class RequestMapper {
-  static loginDTO(credentials: IAccount): any {
+  static loginDTO(credentials: IAccount): IAccount {
     return jsonTransformer(credential).evaluate(credentials);
   }
 

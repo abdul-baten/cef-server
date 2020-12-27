@@ -1,5 +1,5 @@
 export interface IAccountCredentialService {
-  login(credentials: IAccount): Promise<IAccountResponse>;
+  login(credentials: IAccount): Promise<Partial<IAccount>>;
   register(credentials: IAccount): Promise<IAccountResponse>;
 }
 

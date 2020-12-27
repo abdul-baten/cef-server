@@ -5,18 +5,25 @@ import { HTTPError } from '../../utils/httpErrors';
 import { IAccount, IAccountCredentialService, IAccountResponse } from '../../models/account';
 import { injectable } from 'inversify';
 import { AccountRepository } from './repository/account-repository';
+import ResponseMapper from './mappers/response-mapper';
 
 @injectable()
 class AccountService implements IAccountCredentialService {
   private accountRepository = new AccountRepository();
 
-  public async login(credential: IAccount): Promise<IAccountResponse> {
+  public async login(credential: IAccount): Promise<Partial<IAccount>> {
     try {
-      // transforming credentials data
       const loginData = RequestMapper.loginDTO(credential);
-      // const accessToken = await this.auth.getAccessToken();
-      // const token = { accessToken } as IAuthToken;
-      return { authToken: 'aa' };
+      const user = await this.accountRepository.findOne({ email: loginData.email });
+      if (!user) throw new Error('User not found!');
+
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const { email, _id, fullname, password } = user;
+      if (password !== credential.password) throw new Error('User not found!');
+
+      const response = ResponseMapper.login({ email, _id, fullname });
+
+      return response;
     } catch (err) {
       const { message, httpCode, errorCode } = AccountErrorCodes.INCORRECT_CREDENTIALS;
       throw new HTTPError(message, errorCode, httpCode);
@@ -25,11 +32,7 @@ class AccountService implements IAccountCredentialService {
 
   public async register(credential: IAccount): Promise<IAccountResponse> {
     try {
-      // transforming credentials data
       const regData = RequestMapper.registerDTO(credential);
-      // const accessToken = await this.auth.getAccessToken();
-      // const token = { accessToken } as IAuthToken;
-
       await this.accountRepository.create(regData);
 
       return { authToken: 'aa' };

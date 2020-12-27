@@ -1,6 +1,5 @@
 export const credential = `{
-  "email": email,
-  "password": password
+  "email": email
 }`;
 
 export const regCredential = `{
