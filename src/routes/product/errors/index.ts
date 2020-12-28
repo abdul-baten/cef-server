@@ -1,1 +1,1 @@
-export * from './accountCredErrors';
+export * from './productErrors';

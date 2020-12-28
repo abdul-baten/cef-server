@@ -9,6 +9,6 @@ import 'reflect-metadata';
 const DIContainer = new Container();
 
 DIContainer.bind<IAccountCredentialService>(TYPES.AccountCredentials).to(AccountService);
-DIContainer.bind<IProductService>(TYPES.ProductCredentials).to(ProductService);
+DIContainer.bind<IProductService>(TYPES.Product).to(ProductService);
 
 export default DIContainer;

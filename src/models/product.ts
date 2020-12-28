@@ -1,5 +1,6 @@
 export interface IProductService {
-  product(): Promise<IProduct[]>;
+  product(id: number): Promise<IProduct>;
+  products(): Promise<IProduct[]>;
 }
 
 export interface IVariant {

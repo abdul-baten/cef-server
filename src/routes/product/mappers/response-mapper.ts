@@ -1,15 +1,9 @@
 import jsonTransformer from 'jsonata';
-import { IAccount } from '../../../models/account';
+import { IProduct } from '../../../models/product';
+import { productDetails } from './templates';
 
-class ResponseMapper {
-  static login(data: any): Partial<IAccount> {
-    const template = `{
-			"id": _id,
-			"email": email,
-			"fullname": fullname
-		}`;
-    return jsonTransformer(template).evaluate(data);
+export default class ResponseMapper {
+  static productDetails(data: any): IProduct {
+    return jsonTransformer(productDetails).evaluate(data);
   }
 }
-
-export default ResponseMapper;
