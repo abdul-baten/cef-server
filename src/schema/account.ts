@@ -13,7 +13,7 @@ const AccountSchema = new Schema(
       type: String,
       unique: true
     },
-    fullName: {
+    fullname: {
       required: false,
       trim: true,
       type: String
@@ -21,7 +21,13 @@ const AccountSchema = new Schema(
     password: {
       type: String,
       required: [true, 'Password is required!']
-    }
+    },
+    product: [
+      {
+        type: Number,
+        ref: 'Product'
+      }
+    ]
   },
   {
     timestamps: {

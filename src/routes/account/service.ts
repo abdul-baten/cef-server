@@ -1,14 +1,14 @@
-import 'reflect-metadata';
 import RequestMapper from './mappers/request-mapper';
-import { AccountErrorCodes } from './errors';
-import { HTTPError } from '../../utils/httpErrors';
-import { IAccount, IAccountCredentialService, IAccountResponse } from '../../models/account';
-import { injectable } from 'inversify';
-import { AccountRepository } from './repository/account-repository';
 import ResponseMapper from './mappers/response-mapper';
+import { AccountErrorCodes } from './errors';
+import { AccountRepository } from './repository/account-repository';
+import { HTTPError } from '../../utils/httpErrors';
+import { IAccount, IAccountService } from '../../models/account';
+import { injectable } from 'inversify';
+import 'reflect-metadata';
 
 @injectable()
-class AccountService implements IAccountCredentialService {
+class AccountService implements IAccountService {
   private accountRepository = new AccountRepository();
 
   public async login(credential: IAccount): Promise<Partial<IAccount>> {
@@ -30,14 +30,23 @@ class AccountService implements IAccountCredentialService {
     }
   }
 
-  public async register(credential: IAccount): Promise<IAccountResponse> {
+  public async register(credential: IAccount): Promise<IAccount> {
     try {
       const regData = RequestMapper.registerDTO(credential);
-      await this.accountRepository.create(regData);
+      const response = await this.accountRepository.create(regData);
 
-      return { authToken: 'aa' };
+      return response;
     } catch (err) {
       const { message, httpCode, errorCode } = AccountErrorCodes.INCORRECT_CREDENTIALS;
+      throw new HTTPError(message, errorCode, httpCode);
+    }
+  }
+
+  public async logout(): Promise<Record<string, boolean>> {
+    try {
+      return { success: true };
+    } catch (err) {
+      const { message, httpCode, errorCode } = AccountErrorCodes.LOGGED_OUT;
       throw new HTTPError(message, errorCode, httpCode);
     }
   }

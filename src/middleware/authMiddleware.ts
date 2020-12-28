@@ -3,7 +3,7 @@ import CryptoHelper from '../utils/CryptoHelper';
 import fs from 'fs';
 import HttpStatus from 'http-status-codes';
 import IAuthToken from '../models/authToken';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { AuthErrorCodes } from './errors/authErrors';
 import { HTTPError } from '../utils/httpErrors';
 import { NextFunction, Request, Response } from 'express';
@@ -11,14 +11,14 @@ import { NextFunction, Request, Response } from 'express';
 class AuthMiddleware {
   private static async jwtSign(payload: any): Promise<any> {
     const privateKEY = fs.readFileSync(config.session.rsaPrivateKey, 'utf8');
-    const verifyOptions = {
+    const signOptions: SignOptions = {
       issuer: config.session.issuer,
       subject: config.session.subject,
       audience: config.session.audience,
       expiresIn: config.session.tokenLife + 'm',
       algorithm: config.session.algorithm
     };
-    return jwt.sign(payload, privateKEY, verifyOptions);
+    return jwt.sign(payload, privateKEY, signOptions);
   }
 
   static async jwtVerify(token: string): Promise<any> {
@@ -38,11 +38,8 @@ class AuthMiddleware {
     }
   }
 
-  public static async createToken(tokenData: IAuthToken): Promise<any> {
+  public static async createToken(tokenInfo: string): Promise<any> {
     try {
-      const tokenInfo: IAuthToken = {
-        accessToken: tokenData.accessToken
-      };
       const payload = {
         data: CryptoHelper.encrypt(JSON.stringify(tokenInfo), config.session.tokenEncryptionKey)
       };
@@ -71,17 +68,7 @@ class AuthMiddleware {
       decoded = CryptoHelper.decrypt(decoded.data, config.session.tokenEncryptionKey);
       decoded = JSON.parse(decoded);
 
-      /**
-       * we are assumeing that bankToken will be available after successfully logged in
-       */
-      if (!decoded.bankToken) {
-        const { message, errorCode, httpCode } = AuthErrorCodes.NOT_AUTHENTICATED;
-        return next(new HTTPError(message, errorCode, httpCode));
-      }
-
-      const tokenInfo: IAuthToken = {
-        accessToken: decoded.accessToken
-      };
+      const tokenInfo = decoded;
       const payload = {
         data: CryptoHelper.encrypt(JSON.stringify(tokenInfo), config.session.tokenEncryptionKey)
       };
@@ -90,7 +77,7 @@ class AuthMiddleware {
        * After verify we are doing jwtSign to increase the token life time
        */
       const signedToken = await AuthMiddleware.jwtSign(payload);
-      res.cookie('authToken', signedToken, { httpOnly: true, secure: true, sameSite: 'none' });
+      res.cookie('authToken', signedToken, { httpOnly: true, secure: false });
 
       return next();
     } catch (err) {

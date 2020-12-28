@@ -18,5 +18,10 @@ export const AccountErrorCodes = Object.freeze({
     message: 'User already exists in system',
     errorCode: '414',
     httpCode: 409
+  },
+  LOGGED_OUT: {
+    message: 'Logged out already.',
+    errorCode: '415',
+    httpCode: 500
   }
 });

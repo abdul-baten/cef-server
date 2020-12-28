@@ -13,5 +13,10 @@ export default [
     path: 'v1.0.0/register',
     method: 'post',
     handler: [handleValidation(RegistrationCredentials), asyncWrapper(AccountController.register)]
+  },
+  {
+    path: 'v1.0.0/logout',
+    method: 'get',
+    handler: [asyncWrapper(AccountController.logout)]
   }
 ];
