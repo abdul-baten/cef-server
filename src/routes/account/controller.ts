@@ -31,6 +31,22 @@ class AccountController {
     res.clearCookie('authToken');
     res.status(200).json(response);
   }
+
+  public static async addToCart(req: Request, res: Response): Promise<void> {
+    const { id, product } = req.body;
+    const service = DIContainer.get<IAccountService>(TYPES.Account);
+    const response = await service.addToCart(id, product);
+
+    res.status(200).json(response);
+  }
+
+  public static async removeFromCart(req: Request, res: Response): Promise<void> {
+    const { id, product } = req.body;
+    const service = DIContainer.get<IAccountService>(TYPES.Account);
+    const response = await service.removeFromCart(id, product);
+
+    res.status(200).json(response);
+  }
 }
 
 export default AccountController;

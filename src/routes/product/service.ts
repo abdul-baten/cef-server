@@ -12,18 +12,23 @@ export default class ProductService implements IProductService {
 
   public async products(): Promise<IProduct[]> {
     try {
+      const response = [];
       const products = await this.productRepository.find({});
 
-      return products;
+      for (let i = 0; i < products.length; i++) {
+        response.push(ResponseMapper.productDetails(products[i]));
+      }
+
+      return response;
     } catch (err) {
       const { message, httpCode, errorCode } = ProductErrorCodes.NO_PRODUCT_FOUND;
       throw new HTTPError(message, errorCode, httpCode);
     }
   }
 
-  public async product(id: number): Promise<IProduct> {
+  public async product(id: string): Promise<IProduct> {
     try {
-      const product = await this.productRepository.findOne({ id }, '-_id');
+      const product = await this.productRepository.findOne({ _id: id });
       if (!product) throw new Error('Product not found.');
 
       const response = ResponseMapper.productDetails(product);

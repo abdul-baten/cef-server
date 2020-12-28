@@ -9,7 +9,7 @@ export const AccountErrorCodes = Object.freeze({
     errorCode: '706',
     httpCode: 403
   },
-  NO_MEMBER_FOUND: {
+  NO_USER_FOUND: {
     message: 'No user found',
     errorCode: '410',
     httpCode: 404

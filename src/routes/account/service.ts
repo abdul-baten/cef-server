@@ -11,17 +11,19 @@ import 'reflect-metadata';
 class AccountService implements IAccountService {
   private accountRepository = new AccountRepository();
 
-  public async login(credential: IAccount): Promise<Partial<IAccount>> {
+  public async login(credential: IAccount): Promise<IAccount> {
     try {
-      const loginData = RequestMapper.loginDTO(credential);
-      const user = await this.accountRepository.findOne({ email: loginData.email });
-      if (!user) throw new Error('User not found!');
+      const { email } = RequestMapper.loginDTO(credential);
+      const user = await this.accountRepository.findOne({ email }, null, 'products');
+      if (!user) {
+        const { message, httpCode, errorCode } = AccountErrorCodes.NO_USER_FOUND;
+        throw new HTTPError(message, errorCode, httpCode);
+      }
 
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { email, _id, fullname, password } = user;
+      const { password } = user;
       if (password !== credential.password) throw new Error('User not found!');
 
-      const response = ResponseMapper.login({ email, _id, fullname });
+      const response = ResponseMapper.login(user);
 
       return response;
     } catch (err) {
@@ -47,6 +49,40 @@ class AccountService implements IAccountService {
       return { success: true };
     } catch (err) {
       const { message, httpCode, errorCode } = AccountErrorCodes.LOGGED_OUT;
+      throw new HTTPError(message, errorCode, httpCode);
+    }
+  }
+
+  public async addToCart(id: string, product: string): Promise<IAccount> {
+    try {
+      const update = await this.accountRepository.findOneAndUpdate(
+        { _id: id },
+        { $push: { products: product } },
+        { new: true },
+        'products'
+      );
+      const response = ResponseMapper.cart(update);
+
+      return response;
+    } catch (err) {
+      const { message, httpCode, errorCode } = AccountErrorCodes.INCORRECT_CREDENTIALS;
+      throw new HTTPError(message, errorCode, httpCode);
+    }
+  }
+
+  public async removeFromCart(id: string, product: string): Promise<IAccount> {
+    try {
+      const update = await this.accountRepository.findOneAndUpdate(
+        { _id: id },
+        { $pull: { products: product } },
+        { new: true },
+        'products'
+      );
+      const response = ResponseMapper.cart(update);
+
+      return response;
+    } catch (err) {
+      const { message, httpCode, errorCode } = AccountErrorCodes.INCORRECT_CREDENTIALS;
       throw new HTTPError(message, errorCode, httpCode);
     }
   }

@@ -10,3 +10,8 @@ export const RegistrationCredentials = Joi.object({
   fullname: Joi.string().optional(),
   password: Joi.string().required()
 });
+
+export const AccountCart = Joi.object({
+  id: Joi.string().required(),
+  product: Joi.string().required()
+});

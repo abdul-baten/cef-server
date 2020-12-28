@@ -24,8 +24,11 @@ export class BaseRepository<K, T extends Document> implements RepositoryInterfac
     return this.model.findById({ _id }).populate(populates);
   }
 
-  async findOneAndUpdate(filter: any, update: any, options: any): Promise<T | null> {
-    const result = await this.model.findOneAndUpdate(filter, update, options).exec();
+  async findOneAndUpdate(filter: any, update: any, options: any, populate?: any): Promise<T | null> {
+    const result = await this.model
+      .findOneAndUpdate(filter, update, options)
+      .populate(populate)
+      .exec();
     return result;
   }
 

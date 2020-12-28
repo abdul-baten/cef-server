@@ -1,6 +1,6 @@
 export const productDetails = `{
   "available": available,
-	"id": *.id,
+	"id": id,
   "name": name,
   "price": price,
   "variants": variants

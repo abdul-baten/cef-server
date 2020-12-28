@@ -34,4 +34,4 @@ const ProductSchema = new Schema(
 );
 
 export interface IProductModel extends IProduct, Document {}
-export const ProductModel = mongoose.model<IProductModel>('Products', ProductSchema);
+export const ProductModel = mongoose.model<IProductModel>('Product', ProductSchema);

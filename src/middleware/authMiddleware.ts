@@ -2,7 +2,6 @@ import config from '../config/config';
 import CryptoHelper from '../utils/CryptoHelper';
 import fs from 'fs';
 import HttpStatus from 'http-status-codes';
-import IAuthToken from '../models/authToken';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { AuthErrorCodes } from './errors/authErrors';
 import { HTTPError } from '../utils/httpErrors';
@@ -59,7 +58,15 @@ class AuthMiddleware {
         return next(new HTTPError(message, errorCode, httpCode));
       }
 
+      console.info('======= ======= ======= =======');
+      console.info('reqToken', reqToken);
+      console.info('======= ======= ======= =======');
+
       let decoded = await AuthMiddleware.jwtVerify(reqToken);
+      console.info('======= ======= ======= =======');
+      console.info('decoded', decoded);
+      console.info('======= ======= ======= =======');
+
       if (!decoded.verified) {
         const { message, errorCode, httpCode } = AuthErrorCodes.AUTH_TOKEN_INVALID;
         return next(new HTTPError(message, errorCode, httpCode));
@@ -67,6 +74,10 @@ class AuthMiddleware {
 
       decoded = CryptoHelper.decrypt(decoded.data, config.session.tokenEncryptionKey);
       decoded = JSON.parse(decoded);
+
+      console.info('======= ======= ======= =======');
+      console.info('decoded', decoded);
+      console.info('======= ======= ======= =======');
 
       const tokenInfo = decoded;
       const payload = {

@@ -22,9 +22,9 @@ const AccountSchema = new Schema(
       type: String,
       required: [true, 'Password is required!']
     },
-    product: [
+    products: [
       {
-        type: Number,
+        type: Schema.Types.ObjectId,
         ref: 'Product'
       }
     ]
@@ -38,4 +38,4 @@ const AccountSchema = new Schema(
 );
 
 export interface IAccountModel extends IAccount, Document {}
-export const AccountModel = mongoose.model<IAccountModel>('Accounts', AccountSchema);
+export const AccountModel = mongoose.model<IAccountModel>('Account', AccountSchema);

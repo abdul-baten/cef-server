@@ -8,5 +8,5 @@ export const accountResponse = `{
   "email": email,
 	"id": _id,
   "fullname": fullname,
-  "product": product
+  "products": products
 }`;

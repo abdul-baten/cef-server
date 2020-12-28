@@ -1,5 +1,5 @@
 export interface IProductService {
-  product(id: number): Promise<IProduct>;
+  product(id: string): Promise<IProduct>;
   products(): Promise<IProduct[]>;
 }
 

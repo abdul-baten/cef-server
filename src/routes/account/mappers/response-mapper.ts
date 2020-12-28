@@ -3,7 +3,11 @@ import { accountResponse } from './templates';
 import { IAccount } from '../../../models/account';
 
 class ResponseMapper {
-  static login(data: any): Partial<IAccount> {
+  static login(data: any): IAccount {
+    return jsonTransformer(accountResponse).evaluate(data);
+  }
+
+  static cart(data: any): IAccount {
     return jsonTransformer(accountResponse).evaluate(data);
   }
 }
